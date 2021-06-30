@@ -6,11 +6,34 @@
 /*   By: sshakya <sshakya@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/26 04:11:30 by sshakya           #+#    #+#             */
-/*   Updated: 2021/06/26 12:31:10 by sshakya          ###   ########.fr       */
+/*   Updated: 2021/06/30 01:28:55 by sshakya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
+static void	ps_re_index(t_stack *a, t_stack *b)
+{
+	int		i;
+	t_stack	*temp;
+
+	temp = a;
+	i = 0;
+	while (a)
+	{
+		a->n = i;
+		a = a->next;
+		i++;
+	}
+	temp = b;
+	i = 0;
+	while (b)
+	{
+		b->n = i;
+		b = b->next;
+		i++;
+	}
+}
 
 static t_stack	*ps_set_head(t_stack *list)
 {
@@ -37,7 +60,6 @@ static t_stack	*ps_head(t_stack **src, t_stack *dest, char stack)
 	dest->head = dest;
 	dest->tail = dest;
 	dest->index = (*src)->index;
-	dest->n = (*src)->head->n;
 	dest->next = NULL;
 	dest->prev = NULL;
 	*src = ps_set_head((*src)->next);
@@ -58,7 +80,6 @@ t_stack	*ps_push(t_stack **src, t_stack *dest, char stack)
 	if (dest == NULL)
 		return (ps_head(src, dest, stack));
 	dest->prev = malloc(sizeof(t_stack));
-	dest->prev->n = (*src)->n;
 	dest->prev->index = (*src)->index;
 	dest->prev->next = dest;
 	dest->prev->prev = NULL;
@@ -72,5 +93,6 @@ t_stack	*ps_push(t_stack **src, t_stack *dest, char stack)
 		write(1, "pa\n", 3);
 	if (stack == 'b')
 		write(1, "pb\n", 3);
+	ps_re_index(*src, dest);
 	return (dest->head);
 }

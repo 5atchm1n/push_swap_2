@@ -6,7 +6,7 @@
 /*   By: sshakya <sshakya@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 19:27:54 by sshakya           #+#    #+#             */
-/*   Updated: 2021/06/26 13:35:50 by sshakya          ###   ########.fr       */
+/*   Updated: 2021/06/30 01:36:56 by sshakya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	print(t_psdata stack)
 		printf("n = %3d\t i = %3d\t p = %p\n", temp->n, temp->index, temp);
 		temp = temp->next;
 	}
+	printf("STACK B\n");
 	temp = stack.b;
 	while (temp != NULL)
 	{
@@ -46,6 +47,7 @@ int	main(int argc, char **argv)
 		ps_error(stack);
 	if (ps_set(argc, argv, &stack) == 0)
 		return (ps_error(stack));
+	//print(stack);
 	ps_sort(&stack);
 	//print(stack);
 	ps_clear(stack);

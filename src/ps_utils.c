@@ -6,7 +6,7 @@
 /*   By: sshakya <sshakya@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 03:42:38 by sshakya           #+#    #+#             */
-/*   Updated: 2021/06/26 23:59:48 by sshakya          ###   ########.fr       */
+/*   Updated: 2021/06/30 00:09:58 by sshakya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,13 @@ int	ps_min(t_stack *a, int *index)
 
 	if (a == NULL)
 		return (0);
-	min = a->n;
+	min = a->index;
 	while (a)
 	{
-		if (a->n < min)
+		if (a->index < min)
 		{
-			min = a->n;
-			*index = a->index;
+			min = a->index;
+			*index = a->n;
 		}
 		a = a->next;
 	}
@@ -61,13 +61,13 @@ int	ps_max(t_stack *a, int *index)
 
 	if (a == NULL)
 		return (0);
-	max = a->n;
+	max = a->index;
 	while (a)
 	{
-		if (a->n > max)
+		if (a->index > max)
 		{
-			max = a->n;
-			*index = a->index;
+			max = a->index;
+			*index = a->n;
 		}
 		a = a->next;
 	}
@@ -99,7 +99,7 @@ int	ps_max_stack(t_stack *a)
 	max = a->index;
 	while (a)
 	{
-		if (a->n > max)
+		if (a->index > max)
 			max = a->index;
 		a = a->next;
 	}

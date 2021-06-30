@@ -6,7 +6,7 @@
 /*   By: sshakya <sshakya@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/20 20:51:36 by sshakya           #+#    #+#             */
-/*   Updated: 2021/06/27 11:28:52 by sshakya          ###   ########.fr       */
+/*   Updated: 2021/06/30 01:20:25 by sshakya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,23 @@ typedef struct s_psdata
 	int				size;
 }				t_psdata;
 
+typedef struct s_moves
+{
+	int		rr;
+	int		ra;
+	int		rb;
+	int		rra;
+	int		rrb;
+	int		rrr;
+}	t_moves;
 
 typedef struct s_stack
 {
 	int				n;
 	int				index;
+	int				in_a;
+	int				tot;
+	struct s_moves	moves;
 	struct s_stack	*head;
 	struct s_stack	*tail;
 	struct s_stack	*next;
@@ -60,9 +72,9 @@ void	ps_pivot_sort(t_stack **stack_a, t_stack **stack_b);
 void	ps_sort(t_psdata *stack);
 
 
-int		ps_next(t_psdata *stack, int *dir);
+void	ps_set_moves(t_psdata *stack, t_moves *moves);
 
-
+void	print(t_psdata stack);
 
 /*
 **	UTILS

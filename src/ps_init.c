@@ -6,7 +6,7 @@
 /*   By: sshakya <sshakya@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/26 04:18:08 by sshakya           #+#    #+#             */
-/*   Updated: 2021/06/26 12:11:56 by sshakya          ###   ########.fr       */
+/*   Updated: 2021/06/29 23:56:53 by sshakya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ static t_stack	*ps_set_stack(int n, char **args)
 		if (stack->next == NULL)
 			return (ps_clear_stack(stack->head));
 		stack->next->index = 0;
+		stack->next->in_a = 0;
 		stack->next->head = stack->head;
 		stack->next->n = ps_atoi(args[i]);
 		stack->next->next = NULL;
