@@ -6,7 +6,7 @@
 /*   By: sshakya <sshakya@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 03:42:38 by sshakya           #+#    #+#             */
-/*   Updated: 2021/06/30 00:09:58 by sshakya          ###   ########.fr       */
+/*   Updated: 2021/06/30 02:27:46 by sshakya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	ps_min(t_stack *a, int *index)
 {
 	int	min;
 
+	*index = 0;
 	if (a == NULL)
 		return (0);
 	min = a->index;
@@ -59,6 +60,7 @@ int	ps_max(t_stack *a, int *index)
 {
 	int	max;
 
+	*index = 0;
 	if (a == NULL)
 		return (0);
 	max = a->index;

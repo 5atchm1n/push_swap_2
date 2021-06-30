@@ -6,7 +6,7 @@
 /*   By: sshakya <sshakya@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/27 11:23:51 by sshakya           #+#    #+#             */
-/*   Updated: 2021/06/30 01:56:18 by sshakya          ###   ########.fr       */
+/*   Updated: 2021/06/30 03:49:47 by sshakya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,24 @@ static void	ps_pos(t_stack *a, t_stack *b)
 	int		lim[2];
 	int		index[2];
 
-	lim[0] = ps_max(a, &index[0]);
-	lim[1] = ps_min(a, &index[1]);
+	lim[1] = ps_max(a, &index[1]);
+	lim[0] = ps_min(a, &index[0]);
+	head = a;
 	while (b)
 	{
-		head = a;
-		pos = 0;
-		while (a->next != NULL)
+		pos = 1;
+		a = head;
+		while (a != NULL)
 		{
 			if (b->index > lim[1])
-				b->in_a = index[0];
-			else if (b->index < lim[0])
-				b->in_a = index[1];
-			else if (b->index > a->index && b->index < a->next->index)
+				b->in_a = index[1] - 1;
+			if (b->index < lim[0])
+				b->in_a = index[0] + 1;
+			if (a->next && b->index > a->index 
+					&& b->index < a->next->index)
 				b->in_a = pos;
+			if (!a->next && b->index > a->index && b->index < a->head->index)
+				b->in_a = 0;
 			pos++;
 			a = a->next;
 		}
@@ -42,40 +46,37 @@ static void	ps_pos(t_stack *a, t_stack *b)
 
 static void ps_count_moves(t_stack *b, t_stack *a)
 {
-	int	n;
 	int	size_a;
 	int	size_b;
 
 	size_a = ps_size(a);
 	size_b = ps_size(b);
-	n = 1;
 	while (b)
 	{
-		if (n <= size_b / 2)
+		if (b->n <= size_b / 2)
 		{
 			b->moves.rb = b->n;
 			b->moves.rrb = 0;
 		}
 		else
 		{
-			b->moves.rrb = b->n % size_b;
+			b->moves.rrb = size_b % b->n;
 			b->moves.rb = 0;
 		}
-		if (b->in_a > size_a / 2)
+		if (b->in_a <= size_a / 2)
 		{
-			b->moves.ra = b->in_a % size_a;
+			b->moves.ra = b->in_a;
 			b->moves.rra = 0;
 		}
 		else
 		{
-			b->moves.rra = b->in_a;
+			b->moves.rra = size_a % b->in_a;
 			b->moves.ra = 0;
 		}
 		b->moves.rr = 0;
 		b->moves.rrr = 0;
-		printf("%d %d %d %d %d %d \n", b->moves.rra, b->moves.rrb, b->moves.ra, b->moves.rb, b->moves.rr, b->moves.rrr); 
+		//printf("rb=%3d rrb=%3d ra=%3d rra=%3d rr=%3d rrr=%3d \n", b->moves.rb, b->moves.rrb, b->moves.ra, b->moves.rra, b->moves.rr, b->moves.rrr); 
 		b = b->next;
-		n++;
 	}
 }
 
@@ -91,9 +92,19 @@ static void	ps_optimize(t_stack *b)
 	while (b)
 	{
 		if (b->moves.ra > 0 && b->moves.rb > 0)
-			b->moves.rr = ps_abs(b->moves.ra - b->moves.rb);
+		{
+			if (b->moves.ra != b->moves.rb)
+				b->moves.rr = ps_abs(b->moves.ra - b->moves.rb);
+			else
+				b->moves.rr = b->moves.ra;
+		}
 		if (b->moves.rra > 0 && b->moves.rrb > 0)
-			b->moves.rrr = ps_abs(b->moves.rra - b->moves.rrb);
+		{
+			if (b->moves.rra != b->moves.rrb)
+				b->moves.rrr = ps_abs(b->moves.rra - b->moves.rrb);
+			else
+				b->moves.rrr = b->moves.rra;
+		}
 		if (b->moves.rr > 0)
 		{
 			b->moves.ra = b->moves.ra - b->moves.rr;
@@ -139,6 +150,7 @@ void	ps_set_moves(t_psdata *stack, t_moves *moves)
 	ps_count_moves(stack->b, stack->a);
 	ps_optimize(stack->b);
 	index = ps_find_best(stack->b);
+	//print(*stack);
 	while (temp)
 	{
 		if (temp->index == index)
