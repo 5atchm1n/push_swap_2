@@ -6,7 +6,7 @@
 /*   By: sshakya <sshakya@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/20 17:51:11 by sshakya           #+#    #+#             */
-/*   Updated: 2021/06/30 01:37:14 by sshakya          ###   ########.fr       */
+/*   Updated: 2021/07/01 17:54:06 by Shakira          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,9 +101,9 @@ void	ps_sort(t_psdata *stack)
 			moves.rrr -= 1;
 			write(1, "rrr\n", 4);
 		}
-		while (moves.rb-- > 0)
-			ps_rotate(stack->a, 'a');
 		while (moves.ra-- > 0)
+			ps_rotate(stack->a, 'a');
+		while (moves.rb-- > 0)
 			ps_rotate(stack->b, 'b');
 		while (moves.rrb-- > 0)
 			ps_reverse(stack->a, 'a');
