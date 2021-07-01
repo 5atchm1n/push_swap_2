@@ -6,13 +6,13 @@
 /*   By: sshakya <sshakya@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/20 17:51:11 by sshakya           #+#    #+#             */
-/*   Updated: 2021/07/01 17:54:06 by Shakira          ###   ########.fr       */
+/*   Updated: 2021/07/01 19:43:19 by sshakya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static int	ps_issorted(t_stack *stack)
+int	ps_issorted(t_stack *stack)
 {
 	t_stack	*temp;
 
@@ -105,10 +105,12 @@ void	ps_sort(t_psdata *stack)
 			ps_rotate(stack->a, 'a');
 		while (moves.rb-- > 0)
 			ps_rotate(stack->b, 'b');
-		while (moves.rrb-- > 0)
-			ps_reverse(stack->a, 'a');
 		while (moves.rra-- > 0)
+			ps_reverse(stack->a, 'a');
+		while (moves.rrb-- > 0)
 			ps_reverse(stack->b, 'b');
 		stack->a = ps_push(&stack->b, stack->a, 'a'); 
 	}
+	while (!ps_issorted(stack->a))
+		ps_reverse(stack->a, 'a');
 }

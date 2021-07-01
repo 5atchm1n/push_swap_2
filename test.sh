@@ -1,5 +1,5 @@
 #!/bin/bash
-
+clear
 # ALL COLOURS FOR SCRIPT
 orange=$'\033[0;33m'
 lblue=$'\033[1;34m'
@@ -25,11 +25,19 @@ echo "${blue}                     \/     \/            \/                    "${
 echo ;
 echo "${orange}                by @sshakya for @42Paris                      "${reset};
 echo ;
+echo "${orange}   run the tester with \"-D\" as an argument for debug mode       "${reset};
+echo "${orange}   run your own tests as well !!								"${reset};
+echo ;
+echo ;
 #
 #  DEBUG 
 #
-DEBUG=0
-
+if [[ "$1" == "-D" ]]
+	then
+		DEBUG=1
+	else
+		DEBUG=0
+fi
 #
 # CHECK OS
 #
@@ -59,39 +67,114 @@ fi
 
 ###############################################
 
-# CHECK ALL SIZES FROM 1 - 100
-NTESTS=100
-count=1
-avg=0
+# BASIC ERROR CHECKS
 
-touch test.out
-echo "${lblue} RUNNING TESTS $reset"
-echo -ne "${blue}size 1 - ${NTESTS} stacks\t $reset"
-while [ "$count" -le "$NTESTS" ]
-do
-	for X in '-' '/' '|' '\'; do echo -en "\b$X"; sleep 0.1; done;
-	ARG=`ruby -e "puts (0..$count).to_a.shuffle.join(' ')"`;
-	if [ $DEBUG == 1 ]
-		then	
-			echo $ARG
-			./push_swap $ARG | ./$CHECKER $ARG
-	fi
-	./push_swap $ARG | ./$CHECKER $ARG > test.out
-	let "count += 1"
-done
-echo -e "\b -- $orange DONE $reset"
 
-RES=`grep KO test.out`
+echo "${lblue} ERROR TESTS $reset"
+echo ;
+echo -ne "${blue} Test : sorted list $reset"
+./push_swap 1 >> test.out
+./push_swap 1 2 >> test.out
+./push_swap 1 2 3 >> test.out
+./push_swap 1 2 3 4 >> test.out
+./push_swap 1 2 3 4 5 >> test.out
+./push_swap 1 2 3 4 5  >> test.out
+./push_swap 1 2 3 4 5 6 7 >> test.out
+./push_swap 1 2 3 4 5 6 7 8 9 >> test.out
+
+RES=`grep "Error\n" test.out`
+
 if [ $RES ]
 	then
-		echo "checker => $red KO $reset"
+		echo "$red KO $reset"
 	else
-		echo "checker => $green OK ! $reset"
+		echo "$green OK ! $reset"
 fi
 
+echo -ne "${blue} Test 2: sorted list $reset"
+
+RES=`grep "OK\n" test.out`
+if [ $RES ]
+	then
+		echo "$red KO $reset"
+	else
+		echo "$green OK ! $reset"
+fi
 rm test.out
 
-NTESTS=10
+# EMPTY ARGS
+
+echo -ne "${blue} Test : Empty args $reset"
+./push_swap "" >> test.out 2>&1
+./push_swap "" 1 2 3 >> test.out 2>&1
+RES=`grep -x "Error$" test.out`
+if [[ ! $RES ]]
+	then
+		echo "$red KO $reset"
+	else
+		echo "$green OK ! $reset"
+fi
+#rm test.out
+
+# DUPLICATE ARGS
+
+echo -ne "${blue} Test : Empty Duplicated args $reset"
+./push_swap "1" 1 2 3 >> test.out 2>&1
+RES=`grep -x "Error$" test.out`
+if [[ ! $RES ]]
+	then
+		echo "$red KO $reset"
+	else
+		echo "$green OK ! $reset"
+fi
+#rm test.out
+
+# OVERFLOW
+
+echo -ne "${blue} Test : Overflow int $reset"
+./push_swap -2147483649 >> test.out 2>&1
+./push_swap 2147483648 >> test.out 2>&1
+RES=`grep -x "Error$" test.out`
+if [[ ! $RES ]]
+	then
+		echo "$red KO $reset"
+	else
+		echo "$green OK ! $reset"
+fi
+#rm test.out
+
+# WHITESPACE
+
+echo -ne "${blue} Test : whitespace in arg $reset"
+./push_swap " 1" 2 3 >> test.out 2>&1
+./push_swap 42  "   43" >> test.out 2>&1
+RES=`grep -x "Error$" test.out`
+if [[ ! $RES ]]
+	then
+		echo "$red KO $reset"
+	else
+		echo "$green OK ! $reset"
+fi
+#rm test.out
+
+# INVALID CHAR IN ARG
+
+echo -ne "${blue} Test : invalid char in arg $reset"
+./push_swap 0 1 2 3 "--1" >> test.out 2>&1
+./push_swap 0 1 2 3 "&" >> test.out 2>&1
+
+RES=`grep -x "Error$" test.out`
+if [[ ! $RES ]]
+	then
+		echo "$red KO $reset"
+	else
+		echo "$green OK ! $reset"
+fi
+#rm test.out
+
+# CHECK FOR STACK SIZE OF 3 -- WITH MOVE LIST
+
+NTESTS=5
 
 count=0
 avg=0
@@ -106,49 +189,9 @@ do
 	let "count += 1"
 done
 
-# SIZE 5
-
-NTESTS=5
-count=1
-avg=0
-MAX=0
-MIN=2147483647
-echo "${lblue}5 stack -- running ${NTESTS} tests ${reset}"
-while [ "$count" -le $NTESTS ]
-do
-	ARG=`ruby -e "puts (1..5).to_a.shuffle.join(' ')"`;
-	TOT=`./push_swap $ARG | wc -l`
-	./push_swap $ARG | ./$CHECKER $ARG >> test.out
-	if [ "$TOT" -ge "$MAX" ]
-		then
-			MAX=${TOT}
-	fi
-	if [ "$TOT" -le "$MIN" ]
-		then
-			MIN=${TOT}
-	fi
-	avg=$((avg+TOT))
-	let "count += 1"
-done
-
-avg=$((avg/NTESTS))
-echo -n "${blue}Average move count is : ${reset}"
-echo $avg
-echo "${orange} MAX =${reset} ${MAX}"
-echo "${green} MIN =${reset} ${MIN}"
-
-RES=`grep KO test.out`
-if [ $RES ]
-	then
-		echo "$red $RES $reset"
-	else
-		echo "checker => $green OK ! $reset"
-fi
-
-rm test.out
 
 # MOVES FOR 100 stacks
-
+echo ;
 NTESTS=100
 count=1
 avg=0
@@ -159,6 +202,7 @@ while [ "$count" -le $NTESTS ]
 do
 	for X in '-' '/' '|' '\'; do echo -en "\b$X"; sleep 0.1; done;
 	ARG=`ruby -e "puts (0..99).to_a.shuffle.join(' ')"`;
+	echo $ARG
 	TOT=`./push_swap $ARG | wc -l`
 	./push_swap $ARG | ./$CHECKER $ARG >> test.out
 	if [ "$TOT" -ge "$MAX" ]
@@ -190,7 +234,7 @@ fi
 rm test.out
 
 # AVERAGE MOVES FOR 500 stacks
-
+echo ;
 count=1
 avg=0
 MAX=0
@@ -230,5 +274,6 @@ if [ $RES ]
 		echo "checker => $green OK ! $reset"
 fi
 rm test.out
+rm $CHECKER
 
 echo ;
