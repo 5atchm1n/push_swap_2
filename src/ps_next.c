@@ -6,7 +6,7 @@
 /*   By: sshakya <sshakya@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/27 11:23:51 by sshakya           #+#    #+#             */
-/*   Updated: 2021/06/30 03:49:47 by sshakya          ###   ########.fr       */
+/*   Updated: 2021/07/01 15:11:50 by Shakira          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static void ps_count_moves(t_stack *b, t_stack *a)
 		}
 		b->moves.rr = 0;
 		b->moves.rrr = 0;
-		//printf("rb=%3d rrb=%3d ra=%3d rra=%3d rr=%3d rrr=%3d \n", b->moves.rb, b->moves.rrb, b->moves.ra, b->moves.rra, b->moves.rr, b->moves.rrr); 
+		printf("rb=%3d rrb=%3d ra=%3d rra=%3d rr=%3d rrr=%3d \n", b->moves.rb, b->moves.rrb, b->moves.ra, b->moves.rra, b->moves.rr, b->moves.rrr); 
 		b = b->next;
 	}
 }
@@ -87,24 +87,21 @@ int	ps_abs(int n)
 	return (n);
 }
 
+int	ps_lower(int a, int b)
+{
+	if (a < b)
+		return (a);
+	return (b);
+}
+
 static void	ps_optimize(t_stack *b)
 {
 	while (b)
 	{
 		if (b->moves.ra > 0 && b->moves.rb > 0)
-		{
-			if (b->moves.ra != b->moves.rb)
-				b->moves.rr = ps_abs(b->moves.ra - b->moves.rb);
-			else
-				b->moves.rr = b->moves.ra;
-		}
+			b->moves.rr = ps_lower(b->moves.ra, b->moves.rb);
 		if (b->moves.rra > 0 && b->moves.rrb > 0)
-		{
-			if (b->moves.rra != b->moves.rrb)
-				b->moves.rrr = ps_abs(b->moves.rra - b->moves.rrb);
-			else
-				b->moves.rrr = b->moves.rra;
-		}
+			b->moves.rrr = ps_lower(b->moves.rra, b->moves.rrb);
 		if (b->moves.rr > 0)
 		{
 			b->moves.ra = b->moves.ra - b->moves.rr;
@@ -150,7 +147,7 @@ void	ps_set_moves(t_psdata *stack, t_moves *moves)
 	ps_count_moves(stack->b, stack->a);
 	ps_optimize(stack->b);
 	index = ps_find_best(stack->b);
-	//print(*stack);
+	print(*stack);
 	while (temp)
 	{
 		if (temp->index == index)
