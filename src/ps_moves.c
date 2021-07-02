@@ -6,7 +6,7 @@
 /*   By: sshakya <sshakya@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 17:04:26 by sshakya           #+#    #+#             */
-/*   Updated: 2021/06/26 12:39:29 by sshakya          ###   ########.fr       */
+/*   Updated: 2021/07/02 02:18:52 by sshakya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,14 @@ void	ps_rotate(t_stack *list, char stack)
 		write(1, "rb\n", 3);
 }
 
+void	ps_rotate_r(t_psdata *stack, char ch)
+{
+	ps_rotate(stack->a, 'c');
+	ps_rotate(stack->b, 'c');
+	if (ch == 'r')
+		write(1, "rr\n", 3);
+}
+
 void	ps_reverse(t_stack *list, char stack)
 {
 	int		n;
@@ -80,4 +88,12 @@ void	ps_reverse(t_stack *list, char stack)
 		write(1, "rra\n", 4);
 	if (stack == 'b')
 		write(1, "rrb\n", 4);
+}
+
+void	ps_reverse_r(t_psdata *stack, char ch)
+{
+	ps_reverse(stack->a, 'c');
+	ps_reverse(stack->b, 'c');
+	if (ch == 'r')
+		write(1, "rrr\n", 4);
 }

@@ -6,7 +6,7 @@
 /*   By: sshakya <sshakya@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/20 20:51:36 by sshakya           #+#    #+#             */
-/*   Updated: 2021/07/01 19:43:44 by sshakya          ###   ########.fr       */
+/*   Updated: 2021/07/02 02:24:29 by sshakya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,21 +62,16 @@ void	ps_rotate(t_stack *list, char stack);
 void	ps_swap(t_stack *list, char stack);
 void	ps_reverse(t_stack *list, char stack);
 t_stack	*ps_push(t_stack **src, t_stack *dest, char stack);
+void	ps_rotate_r(t_psdata *list, char c);
+void	ps_reverse_r(t_psdata *list, char c);
 /*
 ** SORT
 */
 void	ps_sort_pivots(t_stack **stack_a, t_stack **stack_b);
 void	ps_sort_max(t_stack **stack_a, t_stack **stack_b);
 void	ps_pivot_sort(t_stack **stack_a, t_stack **stack_b);
-
-void	ps_sort(t_psdata *stack);
-
-int	ps_issorted(t_stack *stack);
-
+int		ps_sort(t_psdata *stack);
 void	ps_set_moves(t_psdata *stack, t_moves *moves);
-
-void	print(t_psdata stack);
-
 /*
 **	UTILS
 */
@@ -86,9 +81,10 @@ int		ps_islower(t_stack *list, int key);
 int		ps_size(t_stack *a);
 int		ps_npivots(int size);
 int		ps_isdigit(int c);
-int		ps_min_stack(t_stack *a);
-int		ps_max_stack(t_stack *a);
-
+int		ps_lower(int a, int b);
+int		ps_issorted(t_stack *stack);
+double	ps_atoi(const char *str);
+int		ps_limit(double num);
 /*
 ** CHECKS AND FREE
 */
@@ -100,13 +96,8 @@ int		ps_error(t_psdata stack);
 /*
 ** PRE-SORT
 */
-
 int		*ps_presort(t_stack *stack);
 int		*ps_pivots(int *list, int size);
 void	ps_set_index(int *list, t_stack *stack, int size);
-/*
-** DEBUG
-*/
-void	my_print(t_stack *list_a, t_stack *list_b);
 
 #endif

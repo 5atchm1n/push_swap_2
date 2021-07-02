@@ -6,7 +6,7 @@
 /*   By: sshakya <sshakya@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 03:42:38 by sshakya           #+#    #+#             */
-/*   Updated: 2021/06/30 02:27:46 by sshakya          ###   ########.fr       */
+/*   Updated: 2021/07/02 02:24:37 by sshakya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,18 @@ int	ps_size(t_stack *a)
 	return (size);
 }
 
+int	ps_lower(int a, int b)
+{
+	if (a < b)
+		return (a);
+	return (b);
+}
+
 int	ps_islower(t_stack *list, int key)
 {
 	while (list != NULL)
 	{
-		if (list->n < key)
+		if (list->index < key)
 			return (1);
 		list = list->next;
 	}
@@ -76,36 +83,42 @@ int	ps_max(t_stack *a, int *index)
 	return (max);
 }
 
-int	ps_min_stack(t_stack *a)
+double	ps_atoi(const char *str)
 {
-	int	min;
+	int		sign;
+	double	num;
 
-	if (a == NULL)
-		return (0);
-	min = a->index;
-	while (a)
+	sign = 1;
+	num = 0;
+	while (*str)
 	{
-		if (a->index < min)
-			min = a->index;
-		a = a->next;
+		if (*str == '-')
+			sign = -1;
+		if (*str == '-' || *str == '+')
+			str++;
+		if (ps_isdigit(*str))
+		{
+			num = num * 10 + (*str - '0');
+			str++;
+		}
+		if (!(ps_isdigit(*str)))
+			return (num * sign);
 	}
-	return (min);
+	return (num * sign);
 }
 
-int	ps_max_stack(t_stack *a)
+int	ps_limit(double num)
 {
-	int	max;
-
-	if (a == NULL)
+	if (num > 2147483647)
 		return (0);
-	max = a->index;
-	while (a)
-	{
-		if (a->index > max)
-			max = a->index;
-		a = a->next;
-	}
-	return (max);
+	if (num < -2147483648)
+		return (0);
+	return (1);
 }
 
-
+int	ps_isdigit(int c)
+{
+	if (c >= 48 && c <= 57)
+		return (1);
+	return (0);
+}

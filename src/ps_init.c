@@ -6,34 +6,27 @@
 /*   By: sshakya <sshakya@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/26 04:18:08 by sshakya           #+#    #+#             */
-/*   Updated: 2021/06/29 23:56:53 by sshakya          ###   ########.fr       */
+/*   Updated: 2021/07/02 02:15:37 by sshakya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int	ps_atoi(const char *str)
+void	ps_set_index(int *list, t_stack *stack, int size)
 {
-	int	sign;
-	int	num;
+	int	n;
 
-	sign = 1;
-	num = 0;
-	while (*str)
+	while (stack != NULL)
 	{
-		if (*str == '-')
-			sign = -1;
-		if (*str == '-' || *str == '+')
-			str++;
-		if (ps_isdigit(*str))
+		n = size;
+		while (n > -1)
 		{
-			num = num * 10 + (*str - '0');
-			str++;
+			if (list[n] == stack->n)
+				stack->index = n;
+			n--;
 		}
-		if (!(ps_isdigit(*str)))
-			return (num * sign);
+		stack = stack->next;
 	}
-	return (num * sign);
 }
 
 static t_stack	*ps_head(char *head)
@@ -41,9 +34,11 @@ static t_stack	*ps_head(char *head)
 	t_stack	*stack;
 
 	stack = malloc(sizeof(t_stack));
+	if (stack == NULL)
+		return (NULL);
 	stack->head = stack;
 	stack->index = 0;
-	stack->n = ps_atoi(head);
+	stack->n = (int)ps_atoi(head);
 	stack->next = NULL;
 	stack->prev = NULL;
 	return (stack);
@@ -75,6 +70,8 @@ static t_stack	*ps_set_stack(int n, char **args)
 	int		i;
 
 	stack = ps_head(args[1]);
+	if (stack == NULL)
+		return (NULL);
 	i = 2;
 	while (i < n)
 	{
@@ -84,7 +81,7 @@ static t_stack	*ps_set_stack(int n, char **args)
 		stack->next->index = 0;
 		stack->next->in_a = 0;
 		stack->next->head = stack->head;
-		stack->next->n = ps_atoi(args[i]);
+		stack->next->n = (int)ps_atoi(args[i]);
 		stack->next->next = NULL;
 		stack->next->prev = stack;
 		stack = stack->next;
@@ -98,6 +95,8 @@ int	ps_set(int argc, char **args, t_psdata *stack)
 {
 	stack->a = ps_set_stack(argc, args);
 	if (stack->a == NULL)
+		return (0);
+	if (!ps_check(stack->a))
 		return (0);
 	stack->size = ps_size(stack->a);
 	stack->list = ps_presort(stack->a);

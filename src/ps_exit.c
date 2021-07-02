@@ -6,27 +6,26 @@
 /*   By: sshakya <sshakya@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/22 12:46:27 by sshakya           #+#    #+#             */
-/*   Updated: 2021/06/26 10:19:27 by sshakya          ###   ########.fr       */
+/*   Updated: 2021/07/02 02:15:19 by sshakya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int	ps_isdigit(int c)
-{
-	if (c >= 48 && c <= 57)
-		return (1);
-	return (0);
-}
-
 int	ps_check_arg(char **args, int size)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
+	double	n;
 
 	i = 1;
 	while (i < size)
 	{
+		n = ps_atoi(args[i]);
+		if (!ps_limit(n))
+			return (0);
+		if (args[i][0] == '\0')
+			return (0);
 		j = 0;
 		while (args[i][j] != '\0')
 		{
@@ -53,10 +52,7 @@ int	ps_check(t_stack *stack)
 		while (temp != NULL)
 		{
 			if (stack->n == temp->n)
-			{
-				write (1, "Error\n", 6);
 				return (0);
-			}
 			temp = temp->next;
 		}
 		stack = stack->next;
@@ -88,9 +84,10 @@ void	ps_clear(t_psdata stack)
 	free(stack.list);
 	free(stack.pivots);
 }
-int		ps_error(t_psdata stack)
+
+int	ps_error(t_psdata stack)
 {
 	ps_clear(stack);
-	write(1, "Error\n", 6);
+	write(2, "Error\n", 6);
 	return (0);
 }

@@ -6,28 +6,11 @@
 /*   By: sshakya <sshakya@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/11 11:01:34 by sshakya           #+#    #+#             */
-/*   Updated: 2021/06/26 12:17:22 by sshakya          ###   ########.fr       */
+/*   Updated: 2021/07/02 00:15:03 by sshakya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-
-void	ps_set_index(int *list, t_stack *stack, int size)
-{
-	int	n;
-
-	while (stack != NULL)
-	{
-		n = size;
-		while (n > -1)
-		{
-			if (list[n] == stack->n)
-				stack->index = n;
-			n--;
-		}
-	stack = stack->next;
-	}
-}
 
 int	ps_npivots(int size)
 {

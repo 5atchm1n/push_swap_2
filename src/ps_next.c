@@ -6,7 +6,7 @@
 /*   By: sshakya <sshakya@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/27 11:23:51 by sshakya           #+#    #+#             */
-/*   Updated: 2021/07/01 21:03:14 by sshakya          ###   ########.fr       */
+/*   Updated: 2021/07/02 02:20:25 by sshakya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,13 @@
 
 static void	ps_pos(t_stack *a, t_stack *b)
 {
-	t_stack *head;
+	t_stack	*head;
 	int		pos;
 	int		lim[2];
 	int		index[2];
 
 	lim[1] = ps_max(a, &index[1]);
 	lim[0] = ps_min(a, &index[0]);
-	//printf("index1=%d\n", index[1]);
 	head = a;
 	while (b)
 	{
@@ -35,7 +34,7 @@ static void	ps_pos(t_stack *a, t_stack *b)
 				b->in_a = index[0];
 			if (a->next && b->index > a->index && b->index < a->next->index)
 				b->in_a = pos;
-			if (!a->next && b->index > a->index && b->index < a->head->index) 
+			if (!a->next && b->index > a->index && b->index < a->head->index)
 				b->in_a = 0;
 			pos++;
 			a = a->next;
@@ -44,7 +43,7 @@ static void	ps_pos(t_stack *a, t_stack *b)
 	}
 }
 
-static void ps_count_moves(t_stack *b, t_stack *a)
+static void	ps_count_moves(t_stack *b, t_stack *a)
 {
 	int	size_a;
 	int	size_b;
@@ -75,23 +74,8 @@ static void ps_count_moves(t_stack *b, t_stack *a)
 		}
 		b->moves.rr = 0;
 		b->moves.rrr = 0;
-		//printf("rb=%3d rrb=%3d ra=%3d rra=%3d rr=%3d rrr=%3d \n", b->moves.rb, b->moves.rrb, b->moves.ra, b->moves.rra, b->moves.rr, b->moves.rrr); 
 		b = b->next;
 	}
-}
-
-int	ps_abs(int n)
-{
-	if (n < 0)
-		return (-n);
-	return (n);
-}
-
-int	ps_lower(int a, int b)
-{
-	if (a < b)
-		return (a);
-	return (b);
 }
 
 static void	ps_optimize(t_stack *b)
@@ -112,9 +96,8 @@ static void	ps_optimize(t_stack *b)
 			b->moves.rra = b->moves.rra - b->moves.rrr;
 			b->moves.rrb = b->moves.rrb - b->moves.rrr;
 		}
-		b->tot = b->moves.rr + b->moves.rrr + b->moves.ra 
+		b->tot = b->moves.rr + b->moves.rrr + b->moves.ra
 			+ b->moves.rb + b->moves.rra + b->moves.rrb;
-		//printf("stack[%3d][%3d] rb=%3d rrb=%3d ra=%3d rra=%3d rr=%3d rrr=%3d tot = %3d\n",b->n,b->index, b->moves.rb, b->moves.rrb, b->moves.ra, b->moves.rra, b->moves.rr, b->moves.rrr, b->tot); 
 		b = b->next;
 	}
 }
@@ -135,22 +118,19 @@ static int	ps_find_best(t_stack *stack)
 		}
 		stack = stack->next;
 	}
-	//printf("tot = %3d index = %3d\n", tot, n);
 	return (n);
 }
 
 void	ps_set_moves(t_psdata *stack, t_moves *moves)
 {
-	t_stack *temp;
-	int	index;
+	t_stack	*temp;
+	int		index;
 
-	//print(*stack);
 	temp = stack->b;
 	ps_pos(stack->a, stack->b);
 	ps_count_moves(stack->b, stack->a);
 	ps_optimize(stack->b);
 	index = ps_find_best(stack->b);
-	//printf("%3d\n", index);
 	while (temp)
 	{
 		if (temp->index == index)

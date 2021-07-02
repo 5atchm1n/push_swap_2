@@ -6,7 +6,7 @@
 /*   By: sshakya <sshakya@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/26 04:11:30 by sshakya           #+#    #+#             */
-/*   Updated: 2021/06/30 01:28:55 by sshakya          ###   ########.fr       */
+/*   Updated: 2021/07/02 02:12:51 by sshakya          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ static t_stack	*ps_head(t_stack **src, t_stack *dest, char stack)
 
 	temp = (*src)->head;
 	dest = malloc(sizeof(t_stack));
+	if (dest == NULL)
+		return (NULL);
 	dest->head = dest;
 	dest->tail = dest;
 	dest->index = (*src)->index;
@@ -80,6 +82,8 @@ t_stack	*ps_push(t_stack **src, t_stack *dest, char stack)
 	if (dest == NULL)
 		return (ps_head(src, dest, stack));
 	dest->prev = malloc(sizeof(t_stack));
+	if (dest->prev == NULL)
+		return (ps_clear_stack(dest->head));
 	dest->prev->index = (*src)->index;
 	dest->prev->next = dest;
 	dest->prev->prev = NULL;
